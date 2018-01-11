@@ -1,48 +1,117 @@
-﻿<html>
+﻿<!doctype html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous" />
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     -->
 </head>
 <body>
-    <h1>Azure Event Generator</h1>
-    <label>Select the Azure Messenging Service you would like to use:</label>
-    <select>
-        <option value="eventgrid">Event Grid</option>
-        <option value="eventhub">Event Hub</option>
-        <option value="servicebus">Service Bus</option>
-        <option value="storagequeue">Storage Queue</option>
-    </select>
+    <section class="jumbotron" style="width:100%">
+        <div class="row text-center">
+            <h1 class="lead text-centered">Azure Event Generator</h1>
+        </div>
+        <div class="row text-center">
+            <p class="lead text-muted">A simple tool for creating sample events in Azure messaging services</p>
+        </div>
+    </section>
 
-    <!--eventgrid-->
-    <label>Event Grid Endpoint:</label><input id="egEndpoint" type="text" name="egEndpoint" /><br>
-    <label>Event Grid Key:</label><input id="egKey" type="text" name="egKey" /><br>
+    <div class="container">
+        <h2>Messaging Service</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">Select the Azure messaging service you would like to use:</div>
+            <div class="panel-body">
+                <select id="messageService">
+                    <option value="" selected></option>
+                    <option value="eventgrid">Event Grid</option>
+                    <option value="eventhub">Event Hub</option>
+                    <option value="servicebus">Service Bus</option>
+                    <option value="storagequeue">Storage Queue</option>
+                </select>
+            </div>
+        </div>
+    </div>
 
-    <!--eventhub-->
-    <label>Connection String for Event Hub Namespace:</label><input id="ehCn" type="text" name="ehCn" /><br>
-    <label>Event Hub Name:</label><input id="ehName" type="text" name="ehName" /><br>
+    <div class="container" id="egMessageServiceSettings" hidden>
+        <h2>Event Grid Settings</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">Now please provide the setting for the Event Grid you'd like to use:</div>
+            <div class="panel-body">
+                <label>Event Grid Endpoint:</label><input class="egMessageServiceSetting" id="egEndpoint" type="text" name="egEndpoint" /><br>
+                <label>Event Grid Key:</label><input class="egMessageServiceSetting" id="egKey" type="text" name="egKey" /><br>
+            </div>
+        </div>
+    </div>
 
-    <!--servicebus-->
-    <label>Connection String for Service Bus Namespace:</label><input id="sbCn" type="text" name="sbCn" /><br>
-    <label>Service Bus Queue Name:</label><input id="sbQueue" type="text" name="sbQueue" /><br>
+    <div class="container" id="ehMessageServiceSettings" hidden>
+        <h2>Event Hub Settings</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">Now please provide the setting for the Event Hub you'd like to use:</div>
+            <div class="panel-body">
+                <label>Connection String for Event Hub Namespace:</label><input class="ehMessageServiceSetting" id="ehConnectionString" type="text" name="ehConnectionString" /><br>
+                <label>Event Hub Name:</label><input class="ehMessageServiceSetting" id="ehEventHub" type="text" name="ehEventHub" /><br>
+            </div>
+        </div>
+    </div>
 
-    <!--storagequeue-->
-    <label>Connection String for the Storage Account:</label><input id="sqCn" type="text" name="sqCn" /><br>
-    <label>Storage Queue Name:</label><input id="sqName" type="text" name="sqName" /><br>
+    <div class="container" id="sbMessageServiceSettings" hidden>
+        <h2>Service Bus Settings</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">Now please provide the setting for the Service Bus you'd like to use:</div>
+            <div class="panel-body">
+                <label>Connection String for Service Bus Namespace:</label><input class="sbMessageServiceSetting" id="sbCn" type="text" name="sbCn" /><br>
+                <label>Service Bus Queue Name:</label><input class="sbMessageServiceSetting" id="sbQueue" type="text" name="sbQueue" /><br>
+            </div>
+        </div>
+    </div>
 
-    <label>Message duration:</label><br>
-    <label>Message frequency:</label>
-    <select>
-        <option value="1">1</option>
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-        <option value="100" />
-    </select><br>
-    <input id="startButton" type="button" value="Start" />
-    <input id="stopButton" type="button" value="Stop" />
+    <div class="container" id="sqMessageServiceSettings" hidden>
+        <h2>Storage Queue Settings</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">Now please provide the setting for the Storage Queue you'd like to use:</div>
+            <div class="panel-body">
+                <label>Connection String for the Storage Account:</label><input class="sqMessageServiceSetting" id="sqSettingCn" type="text" name="sqCn" /><br>
+                <label>Storage Queue Name:</label><input class="sqMessageServiceSetting"id="sqName" type="text" name="sqName" /><br>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="MessageSendSettings" hidden>
+        <h2>Now let's pick our scenario and send some messages:</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <input type="radio" name="messageScenario" value="simple" checked>Simple
+                <input type="radio" name="messageScenario" value="ninjabattle">Ninja Battle
+                <br>
+                <p id="messageScenarioDescription">Simple enumerated messages</p>
+                <label>Message duration:</label>
+                <select id="messageDuration">
+                    <option value="1">1 minute</option>
+                    <option value="2">2 minutes</option>
+                    <option value="3 minutes">3 minutes</option>
+                    <option value="4 minutes">4 minutes</option>
+                    <option value="5 minutes">5 minutes</option>
+                </select><br>
+                <label>Message frequency: (per second)</label>
+                <select id="messageFrequency">
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="1000">1000</option>
+                </select><br>
+                <input class="btn btn-primary" id="startButton" type="button" value="Start"/>
+                <input class="btn btn-primary" id="stopButton" type="button" value="Stop" disabled/>
+            </div>
+        </div>
+    </div>
     <script src="eventgen.js"></script>
 </body>
 </html>
