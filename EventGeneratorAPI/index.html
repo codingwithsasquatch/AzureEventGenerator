@@ -1,0 +1,48 @@
+﻿<html>
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    -->
+</head>
+<body>
+    <h1>Azure Event Generator</h1>
+    <label>Select the Azure Messenging Service you would like to use:</label>
+    <select>
+        <option value="eventgrid">Event Grid</option>
+        <option value="eventhub">Event Hub</option>
+        <option value="servicebus">Service Bus</option>
+        <option value="storagequeue">Storage Queue</option>
+    </select>
+
+    <!--eventgrid-->
+    <label>Event Grid Endpoint:</label><input id="egEndpoint" type="text" name="egEndpoint" /><br>
+    <label>Event Grid Key:</label><input id="egKey" type="text" name="egKey" /><br>
+
+    <!--eventhub-->
+    <label>Connection String for Event Hub Namespace:</label><input id="ehCn" type="text" name="ehCn" /><br>
+    <label>Event Hub Name:</label><input id="ehName" type="text" name="ehName" /><br>
+
+    <!--servicebus-->
+    <label>Connection String for Service Bus Namespace:</label><input id="sbCn" type="text" name="sbCn" /><br>
+    <label>Service Bus Queue Name:</label><input id="sbQueue" type="text" name="sbQueue" /><br>
+
+    <!--storagequeue-->
+    <label>Connection String for the Storage Account:</label><input id="sqCn" type="text" name="sqCn" /><br>
+    <label>Storage Queue Name:</label><input id="sqName" type="text" name="sqName" /><br>
+
+    <label>Message duration:</label><br>
+    <label>Message frequency:</label>
+    <select>
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100" />
+    </select><br>
+    <input id="startButton" type="button" value="Start" />
+    <input id="stopButton" type="button" value="Stop" />
+    <script src="eventgen.js"></script>
+</body>
+</html>

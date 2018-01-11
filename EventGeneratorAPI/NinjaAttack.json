@@ -1,0 +1,62 @@
+﻿{
+  "goodNinjas": ["Bob", "Jane", "Kathy", "Ted", "Jessica"],
+  "badNinjas": ["Kristen", "Joe",  "Beth", "Tim"],
+  "weapons": [
+    {
+      "name": "stick",
+      "actions": [
+        {
+          "name": "poked",
+          "points": 10
+        },
+        {
+          "name": "hit",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "name": "nunchucks",
+      "actions": [
+        {
+          "name": "hit",
+          "points": 10
+        },
+        {
+          "name": "choked",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "name": "staff",
+      "actions": [
+        {
+          "name": "poked",
+          "points": 20
+        },
+        {
+          "name": "hit",
+          "points": 20
+        }
+      ]
+    },
+    {
+      "name": "katana",
+      "actions": [
+        {
+          "name": "stabbed",
+          "points": 50
+        },
+        {
+          "name": "hit",
+          "points": 10
+        },
+        {
+          "name": "slashed",
+          "points": 30
+        }
+      ]
+    }
+  ]
+}
