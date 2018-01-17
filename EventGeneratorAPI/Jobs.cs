@@ -1,4 +1,7 @@
-using System.Collections.Generic;
+//#r "Newtonsoft.Json"
+//#r "Microsoft.WindowsAzure.Storage"
+//#r "Microsoft.ServiceBus"
+
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -213,8 +216,6 @@ namespace EventGeneratorAPI
             return $"finished sending {numOfMessages} to {egJobProperties.endpoint}!";
         }
 
-
-
         private static string[] CreateMessages(int numOfMessages, string scheme)
         {
             string[] messages = new string[numOfMessages];
@@ -308,6 +309,30 @@ namespace EventGeneratorAPI
                 default:
                     return new HttpResponseMessage(HttpStatusCode.NotImplemented) { Content = new StringContent(jobId) };
             }
+        }
+
+        [FunctionName("Gui")]
+        public static HttpResponseMessage IndexHtml(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "gui")]HttpRequestMessage req, TraceWriter log)
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new FileStream(@"d:\home\site\wwwroot\www\index.html", FileMode.Open);
+            //var stream = new FileStream(@"C:\Projects\EventGenerator\EventGeneratorAPI\www\index.html", FileMode.Open);
+            response.Content = new StreamContent(stream);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            return response;
+        }
+
+        [FunctionName("EventgenJS")]
+        public static HttpResponseMessage EventgenJS(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "eventgen.js")]HttpRequestMessage req, TraceWriter log)
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new FileStream(@"d:\home\site\wwwroot\www\eventgen.js", FileMode.Open);
+            //var stream = new FileStream(@"C:\Projects\EventGenerator\EventGeneratorAPI\www\eventgen.js", FileMode.Open);
+            response.Content = new StreamContent(stream);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/javascript");
+            return response;
         }
     }
 }

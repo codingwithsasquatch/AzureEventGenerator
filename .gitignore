@@ -260,3 +260,7 @@ paket-files/
 __pycache__/
 *.pyc
 /EventGeneratorAPI/Properties/launchSettings.json
+EventGeneratorAPI/Properties/PublishProfiles/eventgenerator - Web Deploy.pubxml
+EventGeneratorAPI/Properties/launchSettings.json
+EventGeneratorAPI/Properties/launchSettings.json
+EventGeneratorAPI/project.json

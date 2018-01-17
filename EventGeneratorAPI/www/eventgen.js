@@ -1,4 +1,6 @@
-﻿function startButtonClick() {
+﻿/*eslint eqeqeq: ["error", "smart"]*/
+
+function startButtonClick() {
     var messageDuration = document.getElementById('messageDuration').value;
     var messageFrequency = document.getElementById('messageFrequency').value;
     var messageMethod = document.getElementById('messageService').value;
@@ -32,7 +34,7 @@
 
     console.log(jobRequest);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:7071/api/job", true);
+    xhttp.open("POST", "/api/job", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(jobRequest));
     console.log(xhttp.responseText)
@@ -48,7 +50,7 @@
 
 function stopButtonClick() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "http://localhost:7071/api/job/", true);
+    xhttp.open("DELETE", "/api/job/", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(jobRequest);
     console.log(xhttp.responseText)
