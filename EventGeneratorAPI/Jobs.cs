@@ -316,7 +316,7 @@ namespace EventGeneratorAPI
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "gui")]HttpRequestMessage req, TraceWriter log)
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var stream = new FileStream(@"d:\home\site\wwwroot\www\index.html", FileMode.Open);
+            var stream = new FileStream(@"d:\home\site\wwwroot\www\index.html", FileMode.Open, FileAccess.Read, FileShare.Read);
             //var stream = new FileStream(@"C:\Projects\EventGenerator\EventGeneratorAPI\www\index.html", FileMode.Open);
             response.Content = new StreamContent(stream);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
@@ -325,14 +325,20 @@ namespace EventGeneratorAPI
 
         [FunctionName("EventgenJS")]
         public static HttpResponseMessage EventgenJS(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "eventgen.js")]HttpRequestMessage req, TraceWriter log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "eventgen.js")]HttpRequestMessage req, TraceWriter log)
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var stream = new FileStream(@"d:\home\site\wwwroot\www\eventgen.js", FileMode.Open);
+            var stream = new FileStream(@"d:\home\site\wwwroot\www\eventgen.js", FileMode.Open, FileAccess.Read, FileShare.Read);
             //var stream = new FileStream(@"C:\Projects\EventGenerator\EventGeneratorAPI\www\eventgen.js", FileMode.Open);
             response.Content = new StreamContent(stream);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/javascript");
             return response;
+        }
+
+        [FunctionName("KeepAlive")]
+        public static void KeepAlive([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, TraceWriter log)
+        {
+            log.Info($"KeepAlive Timer trigger function executed");
         }
     }
 }
