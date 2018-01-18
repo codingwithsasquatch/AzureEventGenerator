@@ -42,7 +42,7 @@ function startButtonClick() {
 
     document.getElementById('stopButton').disabled = false;
     document.getElementById('startButton').disabled = true;
-    setTimeout(() => {
+    setTimeout(function () {
         document.getElementById('startButton').disabled = false;
         document.getElementById('stopButton').disabled = true;
     }, 60*1000*messageDuration)
@@ -73,7 +73,7 @@ function messageScenarioClicked() {
 
 function messageServiceChanged() {
     messageServiceSettingsChanged();
-    document.querySelectorAll('div[id$="MessageServiceSettings"]').forEach( function(el) {
+    Array.prototype.slice.call(document.querySelectorAll('div[id$="MessageServiceSettings"]')).forEach( function(el) {
         el.hidden = true;
     });
     switch (document.getElementById('messageService').value) {
@@ -97,7 +97,7 @@ function messageServiceSettingsChanged() {
         case "eventgrid":
             var hasBlanks = [];
             // get egSettings
-            document.querySelectorAll('*[class$="egMessageServiceSetting"]').forEach((el) => {el.value == '' ? hasBlanks.push(true): hasBlanks.push(false);});
+            Array.prototype.slice.call(document.querySelectorAll('*[class$="egMessageServiceSetting"]')).forEach(function(el) {el.value == '' ? hasBlanks.push(true): hasBlanks.push(false);});
             if (hasBlanks.indexOf(true) == -1) {
                 console.log("no more blanks");
                 document.getElementById('MessageSendSettings').hidden = false;
@@ -109,7 +109,7 @@ function messageServiceSettingsChanged() {
         case "eventhub":
             var hasBlanks = [];
             // get ehSettings
-            document.querySelectorAll('*[class$="ehMessageServiceSetting"]').forEach((el) => {el.value == '' ? hasBlanks.push(true): hasBlanks.push(false);});
+            Array.prototype.slice.call(document.querySelectorAll('*[class$="ehMessageServiceSetting"]')).forEach(function(el) {el.value == '' ? hasBlanks.push(true): hasBlanks.push(false);});
             if (hasBlanks.indexOf(true) == -1) {
                 console.log("no more blanks");
                 document.getElementById('MessageSendSettings').hidden = false;
@@ -121,7 +121,7 @@ function messageServiceSettingsChanged() {
         case "servicebus":
             var hasBlanks = [];
             // get sbSettings
-            document.querySelectorAll('*[class$="sbMessageServiceSetting"]').forEach((el) => {el.value == '' ? hasBlanks.push(true): hasBlanks.push(false);});
+            Array.prototype.slice.call(document.querySelectorAll('*[class$="sbMessageServiceSetting"]')).forEach(function(el) {el.value == '' ? hasBlanks.push(true): hasBlanks.push(false);});
             if (hasBlanks.indexOf(true) == -1) {
                 console.log("no more blanks");
                 document.getElementById('MessageSendSettings').hidden = false;
@@ -133,7 +133,7 @@ function messageServiceSettingsChanged() {
         case "storagequeue":
             var hasBlanks = [];
             // get sqSettings
-            document.querySelectorAll('*[class$="sqMessageServiceSetting"]').forEach((el) => {el.value == '' ? hasBlanks.push(true): hasBlanks.push(false);});
+            Array.prototype.slice.call(document.querySelectorAll('*[class$="sqMessageServiceSetting"]')).forEach(function(el) {el.value == '' ? hasBlanks.push(true): hasBlanks.push(false);});
             if (hasBlanks.indexOf(true) == -1) {
                 console.log("no more blanks");
                 document.getElementById('MessageSendSettings').hidden = false;
@@ -145,8 +145,8 @@ function messageServiceSettingsChanged() {
     }
 }
 
-document.querySelectorAll('input[name="messageScenario"]').forEach((el)=> {el.addEventListener('click', messageScenarioClicked);});
+Array.prototype.slice.call(document.querySelectorAll('input[name="messageScenario"]')).forEach(function(el) {el.addEventListener('click', messageScenarioClicked);});
 document.getElementById('messageService').addEventListener('change', messageServiceChanged);
-document.querySelectorAll('*[class$="MessageServiceSetting"]').forEach((el) => {el.addEventListener('input', messageServiceSettingsChanged);});
+Array.prototype.slice.call(document.querySelectorAll('*[class$="MessageServiceSetting"]')).forEach(function(el) {el.addEventListener('input', messageServiceSettingsChanged);});
 document.getElementById('startButton').addEventListener('click', startButtonClick);
 document.getElementById('stopButton').addEventListener('click', stopButtonClick);
