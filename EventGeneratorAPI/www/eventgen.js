@@ -34,7 +34,7 @@ function startButtonClick() {
 
     console.log(jobRequest);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/job", true);
+    xhttp.open("POST", "/job", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(jobRequest));
     console.log(xhttp.responseText)
@@ -50,7 +50,7 @@ function startButtonClick() {
 
 function stopButtonClick() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "/api/job/", true);
+    xhttp.open("DELETE", "/job/", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(jobRequest);
     console.log(xhttp.responseText)
