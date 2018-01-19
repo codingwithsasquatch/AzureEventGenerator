@@ -25,7 +25,7 @@ namespace EventGeneratorAPI
             {
                 try
                 {
-                    var message = messages[i]; //CreateMessage(i, egJobProperties.messageScheme);
+                    var message = messages[i];
                     log.Info($"Sending message {i}: {message}");
                     var data = new[]
                     {

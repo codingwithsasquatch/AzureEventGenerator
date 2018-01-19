@@ -22,7 +22,7 @@ namespace EventGeneratorAPI
             {
                 try
                 {
-                    var message = messages[i]; //CreateMessage(i, sbJobProperties.messageScheme);
+                    var message = messages[i];
                     log.Info($"Sending message: {message}");
                     var body = Encoding.UTF8.GetBytes(message);
                     await queueClient.SendAsync(new Message { Body = body, ContentType = "text/plain" });

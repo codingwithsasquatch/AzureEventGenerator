@@ -27,7 +27,7 @@ namespace EventGeneratorAPI
             {
                 try
                 {
-                    var message = messages[i]; //CreateMessage(numOfMessages, sqJobProperties.messageScheme);
+                    var message = messages[i];
                     log.Info($"Sending message: {message}");
                     CloudQueueMessage cloudQueueMessage = new CloudQueueMessage(message);
                     await queue.AddMessageAsync(cloudQueueMessage);

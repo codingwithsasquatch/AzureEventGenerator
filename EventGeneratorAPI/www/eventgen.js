@@ -52,7 +52,7 @@ function stopButtonClick() {
     var xhttp = new XMLHttpRequest();
     xhttp.open("DELETE", "/job/", true);
     xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(jobRequest);
+    xhttp.send();
     console.log(xhttp.responseText)
 
     document.getElementById('startButton').disabled = false;

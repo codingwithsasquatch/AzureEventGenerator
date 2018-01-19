@@ -26,7 +26,7 @@ namespace EventGeneratorAPI
             {
                 try
                 {
-                    var message = messages[i]; //CreateMessage(i, ehJobProperties.messageScheme);
+                    var message = messages[i];
                     log.Info($"Sending message: {message}");
                     await eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(message)));
                 }
