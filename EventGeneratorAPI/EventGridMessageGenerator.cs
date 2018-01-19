@@ -35,10 +35,7 @@ namespace EventGeneratorAPI
                             EventType = egJobProperties.MessageScheme.ToLower(),
                             EventTime = DateTime.UtcNow,
                             Id = Guid.NewGuid().ToString(),
-                            Data = new
-                            {
-                                message
-                            }
+                            Data = message
                         }
                     };
                     var response = await client.PostAsJsonAsync(string.Empty, data);
