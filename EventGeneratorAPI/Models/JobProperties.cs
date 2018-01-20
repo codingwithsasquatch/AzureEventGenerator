@@ -10,5 +10,7 @@ namespace EventGeneratorAPI.Models
         public int Duration { get; set; }
         [JsonProperty("messageScheme")]
         public string MessageScheme { get; set; }
+        [JsonProperty("messageMethod")]
+        public string MessageMethod { get; set; }
     }
 }
