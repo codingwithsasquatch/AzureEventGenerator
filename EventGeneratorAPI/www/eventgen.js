@@ -40,11 +40,11 @@ function startButtonClick() {
     console.log(xhttp.responseText)
 
 
-    document.getElementById('stopButton').disabled = false;
+    //document.getElementById('stopButton').disabled = false;
     document.getElementById('startButton').disabled = true;
     setTimeout(function () {
         document.getElementById('startButton').disabled = false;
-        document.getElementById('stopButton').disabled = true;
+        //document.getElementById('stopButton').disabled = true;
     }, 60*1000*messageDuration)
 }
 
@@ -149,4 +149,4 @@ Array.prototype.slice.call(document.querySelectorAll('input[name="messageScenari
 document.getElementById('messageService').addEventListener('change', messageServiceChanged);
 Array.prototype.slice.call(document.querySelectorAll('*[class$="MessageServiceSetting"]')).forEach(function(el) {el.addEventListener('input', messageServiceSettingsChanged);});
 document.getElementById('startButton').addEventListener('click', startButtonClick);
-document.getElementById('stopButton').addEventListener('click', stopButtonClick);
+//document.getElementById('stopButton').addEventListener('click', stopButtonClick);

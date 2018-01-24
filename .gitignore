@@ -264,3 +264,4 @@ EventGeneratorAPI/Properties/PublishProfiles/eventgenerator - Web Deploy.pubxml
 EventGeneratorAPI/Properties/launchSettings.json
 EventGeneratorAPI/Properties/launchSettings.json
 EventGeneratorAPI/project.json
+EventGeneratorAPI/NinjaAttack.json.old

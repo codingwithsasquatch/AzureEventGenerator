@@ -19,25 +19,29 @@ namespace EventGeneratorAPI
             {
                 EntityPath = ehJobProperties.EventHub
             };
-            EventHubClient eventHubClient = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
+
             int numOfMessages = ehJobProperties.Frequency * 60 * ehJobProperties.Duration;
-            string[] messages = Messages.CreateMessages(numOfMessages, ehJobProperties.MessageScheme);
-            for (var i = 0; i < numOfMessages; i++)
+
+            try
             {
-                try
+                EventHubClient eventHubClient = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
+
+                string[] messages = Messages.CreateMessages(numOfMessages, ehJobProperties.MessageScheme);
+                for (var i = 0; i < numOfMessages; i++)
                 {
                     var message = messages[i];
                     log.Info($"Sending message: {message}");
                     await eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(message)));
+                    await Task.Delay(1000 / ehJobProperties.Frequency);
                 }
-                catch (Exception exception)
-                {
-                    log.Info($"Exception: {exception.Message}");
-                }
-                await Task.Delay(1000 / ehJobProperties.Frequency);
-            }
 
-            await eventHubClient.CloseAsync();
+                await eventHubClient.CloseAsync();
+            }
+            catch (Exception exception)
+            {
+                log.Info($"Exception: {exception.Message}");
+                return $"Exception: {exception.Message}";
+            }
 
             log.Info($"finished.");
             return $"finished sending {numOfMessages} to {ehJobProperties.EventHub}!";
