@@ -62,7 +62,7 @@ function stopButtonClick() {
 function messageScenarioClicked() {
     switch (document.querySelector('input[name="messageScenario"]:checked').value)
      {
-        case 'ninjabattle':
+        case 'ninjaattack':
             document.getElementById('messageScenarioDescription').innerHTML = "Epic battle between good and bad ninjas played out through sensors on the battlefield";
             break;
         case 'simple':
