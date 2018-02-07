@@ -7,6 +7,8 @@ using System.Text;
 using System;
 using EventGeneratorAPI.Models;
 using EventGeneratorAPI.MessageEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EventGeneratorAPI
 {
@@ -20,31 +22,39 @@ namespace EventGeneratorAPI
                 EntityPath = ehJobProperties.EventHub
             };
 
+            string connectionString = connectionStringBuilder.ToString();
             int numOfMessages = ehJobProperties.Frequency * 60 * ehJobProperties.Duration;
+            IEnumerable<string> messages = new List<string>(Messages.CreateMessages(numOfMessages, ehJobProperties.MessageScheme));
+            //IList<string> msgs = new List<string>(messages);
 
+            int secondsPerBatch = 5;
+            int messagesPerBatch = secondsPerBatch * ehJobProperties.Frequency;
+
+            while (messages.Count() >0)
+            {
+                await SendMessageBatch( messages.Take(messagesPerBatch), connectionString, log);
+                messages = messages.Skip(messagesPerBatch);
+                log.Info($"sent batch of {numOfMessages} messages");
+            }
+
+            log.Info($"finished.");
+            return $"finished sending {numOfMessages} to {ehJobProperties.EventHub}!";
+        }
+
+        public static async Task SendMessageBatch(IEnumerable<string> messages, string connectionString, TraceWriter log)
+        {
             try
             {
-                EventHubClient eventHubClient = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
+                EventHubClient eventHubClient = EventHubClient.CreateFromConnectionString(connectionString);
+                var ehMessages = messages.Select(m => new EventData(Encoding.UTF8.GetBytes(m)));
 
-                string[] messages = Messages.CreateMessages(numOfMessages, ehJobProperties.MessageScheme);
-                for (var i = 0; i < numOfMessages; i++)
-                {
-                    var message = messages[i];
-                    log.Info($"Sending message: {message}");
-                    await eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(message)));
-                    await Task.Delay(1000 / ehJobProperties.Frequency);
-                }
-
+                await eventHubClient.SendAsync(ehMessages);
                 await eventHubClient.CloseAsync();
             }
             catch (Exception exception)
             {
                 log.Info($"Exception: {exception.Message}");
-                return $"Exception: {exception.Message}";
             }
-
-            log.Info($"finished.");
-            return $"finished sending {numOfMessages} to {ehJobProperties.EventHub}!";
         }
     }
 }
