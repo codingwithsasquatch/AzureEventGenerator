@@ -10,6 +10,7 @@ namespace EventGeneratorAPI.MessageEngine
         internal static string[] CreateNinjaMessages(int numOfMessages)
         {
             dynamic ninjaAttack = JObject.Parse(File.ReadAllText(Path.Combine(Environment.GetEnvironmentVariable("HOME", EnvironmentVariableTarget.Process), @"site\wwwroot\NinjaAttack.json")));
+            //dynamic ninjaAttack = JObject.Parse(File.ReadAllText(System.IO.Path.GetFullPath(@"NinjaAttack.json")));
             string[] messages = new string[numOfMessages];
             Random random = new Random();
 

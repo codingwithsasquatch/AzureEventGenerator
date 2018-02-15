@@ -17,7 +17,7 @@ namespace EventGeneratorAPI
             QueueClient queueClient = new QueueClient(sbJobProperties.ConnectionString, sbJobProperties.Queue);
 
             int numOfMessages = sbJobProperties.Frequency * 60 * sbJobProperties.Duration;
-            string[] messages = Messages.CreateMessages(numOfMessages, sbJobProperties.MessageScheme);
+            string[] messages = (string[])Messages.CreateMessages(numOfMessages, sbJobProperties.MessageScheme);
             for (var i = 0; i < numOfMessages; i++)
             {
                 try

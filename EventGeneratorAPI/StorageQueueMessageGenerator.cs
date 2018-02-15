@@ -21,7 +21,7 @@ namespace EventGeneratorAPI
             await queue.CreateIfNotExistsAsync();
 
             int numOfMessages = sqJobProperties.Frequency * 60 * sqJobProperties.Duration;
-            string[] messages = Messages.CreateMessages(numOfMessages, sqJobProperties.MessageScheme);
+            string[] messages = (string[])Messages.CreateMessages(numOfMessages, sqJobProperties.MessageScheme);
 
             for (var i = 0; i < numOfMessages; i++)
             {

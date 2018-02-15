@@ -20,7 +20,7 @@ namespace EventGeneratorAPI
             client.DefaultRequestHeaders.Add("aeg-sas-key", egJobProperties.Key);
 
             int numOfMessages = egJobProperties.Frequency * 60 * egJobProperties.Duration;
-            string[] messages = Messages.CreateMessages(numOfMessages, egJobProperties.MessageScheme);
+            string[] messages = (string[])Messages.CreateMessages(numOfMessages, egJobProperties.MessageScheme);
             for (var i = 0; i < numOfMessages; i++)
             {
                 try

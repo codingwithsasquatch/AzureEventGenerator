@@ -8,7 +8,7 @@ namespace EventGeneratorAPI.MessageEngine
 {
     static partial class Messages
     {
-        public static string[] CreateMessages(int numOfMessages, string scheme)
+        public static IEnumerable<string> CreateMessages(int numOfMessages, string scheme)
         {
             string[] messages = new string[numOfMessages];
 
@@ -25,7 +25,7 @@ namespace EventGeneratorAPI.MessageEngine
                     }
                     break;
             }
-            return messages;
+            return new List<string>(messages);
         }
     }
 }
