@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -17,65 +18,42 @@ namespace EventGeneratorAPI
         public static async Task<string> RunOrchestrator(
             [OrchestrationTrigger] DurableOrchestrationContext context, TraceWriter log)
         {
-            const int secondsPerBatch = 5;
-
             string output = "";
-            JObject rawProperties = JObject.Parse(context.GetInput<string>());
-            dynamic jobProperties;
+            JObject jobProperties = JObject.Parse(context.GetInput<string>());
+            int duration = (int) jobProperties["duration"];
+            int frequency = (int) jobProperties["frequency"];
+            int secondsPerBatch = Convert.ToInt16(Environment.GetEnvironmentVariable("secondsPerBatch"));
+            int numOfBatches = duration * 60 / secondsPerBatch;
+            int numOfMessages = frequency * 60 * duration;
+            var endTime = context.CurrentUtcDateTime.AddMinutes(duration);
 
-            switch ((string)rawProperties["messageMethod"])
-            {
-                case "eventhub":
-                    jobProperties = rawProperties.ToObject<EventHubJobProperties>();
-                    break;
-                case "storagequeue":
-                    jobProperties = rawProperties.ToObject<StorageQueueJobProperties>();
-                    break;
-                case "servicebus":
-                    jobProperties = rawProperties.ToObject<ServiceBusJobProperties>();
-                    break;
-                case "eventgrid":
-                    jobProperties = rawProperties.ToObject<EventGridJobProperties>();
-                    break;
-                default:
-                    return "invalid messageMethod";
-            }
-
-            int numOfMessages = jobProperties.Frequency * 60 * jobProperties.Duration;
-            IEnumerable<string> messages = Messages.CreateMessages(numOfMessages, jobProperties.MessageScheme);
-            int messagesPerBatch = secondsPerBatch * jobProperties.Frequency;
-            var batchProperties = jobProperties;
-            var nextBatchTime = context.CurrentUtcDateTime.AddSeconds(secondsPerBatch);
-
-            while (messages.Count() > 0)
-            {
-                batchProperties.Messages = messages.Take(messagesPerBatch);
-
-                switch (jobProperties.MessageMethod)
+            while (context.CurrentUtcDateTime < endTime) {
+                var nextBatchTime = context.CurrentUtcDateTime.AddSeconds(secondsPerBatch);
+        
+                switch ((string) jobProperties["messageMethod"])
                 {
                     case "eventhub":
-                        await context.CallActivityAsync<string>("Job_SendEventHubMessageBatch", (EventHubJobProperties)batchProperties);
+                        await context.CallActivityAsync<string>("Job_SendEventHubMessageBatch", jobProperties.ToObject<EventHubJobProperties>());
                         break;
                     case "storagequeue":
-                        output = await context.CallActivityAsync<string>("Job_StorageQueueMessageGenerator", jobProperties.ToObject<JobProperties>());
+                        output = await context.CallActivityAsync<string>("Job_SendStorageQueueMessageBatch", jobProperties.ToObject<JobProperties>());
                         break;
                     case "servicebus":
-                        output = await context.CallActivityAsync<string>("Job_ServiceBusMessageGenerator", jobProperties.ToObject<ServiceBusJobProperties>());
+                        output = await context.CallActivityAsync<string>("Job_SendServiceBusMessageBatch", jobProperties.ToObject<ServiceBusJobProperties>());
                         break;
                     case "eventgrid":
-                        await context.CallActivityAsync<string>("Job_SendEventHubMessageBatch", (EventGridJobProperties)batchProperties);
+                        await context.CallActivityAsync<string>("Job_SendEventHubMessageBatch", jobProperties.ToObject<EventGridJobProperties>());
                         break;
                     default:
                         output = "invalid messageMethod";
                         break;
                 }
 
-                messages = messages.Skip(messagesPerBatch);
                 await context.CreateTimer(nextBatchTime, CancellationToken.None);
             }
 
             log.Info($"finished sending {numOfMessages} messages");
-            return $"finished sending {numOfMessages} messages to your {jobProperties.MessageMethod}";
+            return $"finished sending {numOfMessages} messages to your {jobProperties["messageMethod"]}";
         }
     }
 }

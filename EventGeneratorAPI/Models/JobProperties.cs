@@ -13,6 +13,5 @@ namespace EventGeneratorAPI.Models
         public string MessageScheme { get; set; }
         [JsonProperty("messageMethod")]
         public string MessageMethod { get; set; }
-        public IEnumerable<string> Messages {get; set; }
     }
 }

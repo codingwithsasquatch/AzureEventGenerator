@@ -2,9 +2,11 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.EventHubs;
+using System.Collections.Generic;
 using System.Text;
 using System;
 using EventGeneratorAPI.Models;
+using EventGeneratorAPI.MessageEngine;
 using System.Linq;
 
 namespace EventGeneratorAPI
@@ -22,9 +24,13 @@ namespace EventGeneratorAPI
             string connectionString = connectionStringBuilder.ToString();
             EventHubClient eventHubClient = EventHubClient.CreateFromConnectionString(connectionString);
 
+            int secondsPerBatch = Convert.ToInt16(Environment.GetEnvironmentVariable("secondsPerBatch"));
+            int messagesInBatch = ehJobProperties.Frequency * secondsPerBatch;
+            IEnumerable<string> messages = Messages.CreateMessages(messagesInBatch, ehJobProperties.MessageScheme);
+
             try
             {
-                var ehMessages = ehJobProperties.Messages.Select(m => new EventData(Encoding.UTF8.GetBytes(m)));
+                var ehMessages = messages.Select(m => new EventData(Encoding.UTF8.GetBytes(m)));
 
                 await eventHubClient.SendAsync(ehMessages);
                 await eventHubClient.CloseAsync();
@@ -34,8 +40,8 @@ namespace EventGeneratorAPI
                 log.Info($"Exception: {exception.Message}");
             }
 
-            log.Info($"sent batch of {ehJobProperties.Messages.Count()} messages");
-            return $"finished sending {ehJobProperties.Messages.Count()} to {ehJobProperties.EventHub}!";
+            log.Info($"sent batch of {messages.Count()} messages");
+            return $"finished sending {messages.Count()} to {ehJobProperties.EventHub}!";
         }
     }
 }

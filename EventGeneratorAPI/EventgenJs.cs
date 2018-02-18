@@ -17,7 +17,7 @@ namespace EventGeneratorAPI
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new FileStream(Path.Combine(System.Environment.GetEnvironmentVariable("HOME", EnvironmentVariableTarget.Process), @"site\wwwroot\www\eventgen.js"), FileMode.Open, FileAccess.Read, FileShare.Read);
-            //var stream = new FileStream(System.IO.Path.GetFullPath(@"www\eventgen.js"), FileMode.Open, FileAccess.Read, FileShare.Read);
+            //var stream = new FileStream(System.IO.Path.GetFullPath(@"www/eventgen.js"), FileMode.Open, FileAccess.Read, FileShare.Read);
             response.Content = new StreamContent(stream);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/javascript");
             return response;

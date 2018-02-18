@@ -15,15 +15,19 @@ namespace EventGeneratorAPI
 {
     public static class SendEventGridMessageBatch
     {
-        [FunctionName("Job_EventHubMessageGenerator")]
+        [FunctionName("Job_SendEventGridMessageBatch")]
         public static async Task<string> Run([ActivityTrigger] EventGridJobProperties egJobProperties, TraceWriter log)
         {
             ServiceClientCredentials credentials = new TopicCredentials(egJobProperties.Key);
-            var client = new EventGridClient(credentials);
+            EventGridClient client = new EventGridClient(credentials);
+            
+            int secondsPerBatch = Convert.ToInt16(Environment.GetEnvironmentVariable("secondsPerBatch"));
+            int messagesInBatch = egJobProperties.Frequency * secondsPerBatch;
+            IEnumerable<string> messages = Messages.CreateMessages(messagesInBatch, egJobProperties.MessageScheme);
 
             try
             {
-                var egMessages = (List<EventGridEvent>) egJobProperties.Messages.Select(m => new EventGridEvent()
+                var egMessages = (List<EventGridEvent>) messages.Select(m => new EventGridEvent()
                     {
                         Subject = egJobProperties.MessageScheme.ToLower(),
                         EventType = egJobProperties.MessageScheme.ToLower(),
@@ -40,8 +44,8 @@ namespace EventGeneratorAPI
                 log.Info($"Exception: {exception.Message}");
             }
 
-            log.Info($"sent batch of {egJobProperties.Messages.Count()} messages");
-            return $"finished sending {egJobProperties.Messages.Count()} to {egJobProperties.Endpoint}!";
+            log.Info($"sent batch of {messages.Count()} messages");
+            return $"finished sending {messages.Count()} to {egJobProperties.Endpoint}!";
         }
     }
 }
