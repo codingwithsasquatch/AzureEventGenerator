@@ -42,7 +42,7 @@ namespace EventGeneratorAPI
                         output = await context.CallActivityAsync<string>("Job_SendServiceBusMessageBatch", jobProperties.ToObject<ServiceBusJobProperties>());
                         break;
                     case "eventgrid":
-                        await context.CallActivityAsync<string>("Job_SendEventHubMessageBatch", jobProperties.ToObject<EventGridJobProperties>());
+                        await context.CallActivityAsync<string>("Job_SendEventGridMessageBatch", jobProperties.ToObject<EventGridJobProperties>());
                         break;
                     default:
                         output = "invalid messageMethod";

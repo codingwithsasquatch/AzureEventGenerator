@@ -27,15 +27,16 @@ namespace EventGeneratorAPI
 
             try
             {
-                var egMessages = (List<EventGridEvent>) messages.Select(m => new EventGridEvent()
+                var egMessages = messages.Select(m => new EventGridEvent()
                     {
                         Subject = egJobProperties.MessageScheme.ToLower(),
                         EventType = egJobProperties.MessageScheme.ToLower(),
                         EventTime = DateTime.UtcNow,
                         Id = Guid.NewGuid().ToString(),
+                        DataVersion = "1.0",
                         Data = m
                     }
-                );
+                ).ToList();
 
                 await client.PublishEventsAsync(egJobProperties.Endpoint, egMessages);
             }
