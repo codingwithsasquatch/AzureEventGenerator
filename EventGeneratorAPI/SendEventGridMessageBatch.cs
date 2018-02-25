@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using System.Net.Http.Headers;
 
 namespace EventGeneratorAPI
 {
@@ -38,9 +38,10 @@ namespace EventGeneratorAPI
 
             try
             {
+                HttpClient.DefaultRequestHeaders.Clear();
 
                 HttpClient.DefaultRequestHeaders.Add("aeg-sas-key", egJobProperties.Key);
-                HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("AzureEventGenerator");
+                HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var egMessages = messages.Select(m => new EventGridEvent()
                     {
@@ -62,14 +63,19 @@ namespace EventGeneratorAPI
                 };
 
                 HttpResponseMessage response = await HttpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Exception HTTP Response {response.StatusCode}");
+                }
+
+                log.Info($"sent batch of {messages.Count()} messages");
+                return $"finished sending {messages.Count()} to {egJobProperties.Endpoint}!";
             }
             catch (Exception exception)
             {
                 log.Info($"Exception: {exception.Message}");
+                return $"Exception: {exception.Message}";
             }
-
-            log.Info($"sent batch of {messages.Count()} messages");
-            return $"finished sending {messages.Count()} to {egJobProperties.Endpoint}!";
         }
     }
 }

@@ -266,3 +266,4 @@ EventGeneratorAPI/Properties/launchSettings.json
 EventGeneratorAPI/project.json
 EventGeneratorAPI/NinjaAttack.json.old
 .DS_Store
+/EventGeneratorAPI/Properties/PublishProfiles/eventgenerator2 - Web Deploy.pubxml

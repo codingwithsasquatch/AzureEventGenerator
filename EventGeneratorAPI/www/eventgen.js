@@ -1,5 +1,7 @@
 ﻿/*eslint eqeqeq: ["error", "smart"]*/
 
+var jobID = "";
+
 function startButtonClick() {
     var messageDuration = document.getElementById('messageDuration').value;
     var messageFrequency = document.getElementById('messageFrequency').value;
@@ -34,23 +36,27 @@ function startButtonClick() {
 
     console.log(jobRequest);
     var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+            jobId = xhttp.responseText;
+            console.log(xhttp.responseText);
+            document.getElementById('stopButton').disabled = false;
+            document.getElementById('startButton').disabled = true;
+            setTimeout(function () {
+                document.getElementById('startButton').disabled = false;
+                document.getElementById('stopButton').disabled = true;
+            }, 60 * 1000 * messageDuration)
+        }
+    }
+    
     xhttp.open("POST", "/job", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(jobRequest));
-    console.log(xhttp.responseText)
-
-
-    //document.getElementById('stopButton').disabled = false;
-    document.getElementById('startButton').disabled = true;
-    setTimeout(function () {
-        document.getElementById('startButton').disabled = false;
-        //document.getElementById('stopButton').disabled = true;
-    }, 60*1000*messageDuration)
 }
 
 function stopButtonClick() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "/job/", true);
+    xhttp.open("DELETE", "/job/"+jobId, true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send();
     console.log(xhttp.responseText)
@@ -149,4 +155,4 @@ Array.prototype.slice.call(document.querySelectorAll('input[name="messageScenari
 document.getElementById('messageService').addEventListener('change', messageServiceChanged);
 Array.prototype.slice.call(document.querySelectorAll('*[class$="MessageServiceSetting"]')).forEach(function(el) {el.addEventListener('input', messageServiceSettingsChanged);});
 document.getElementById('startButton').addEventListener('click', startButtonClick);
-//document.getElementById('stopButton').addEventListener('click', stopButtonClick);
+document.getElementById('stopButton').addEventListener('click', stopButtonClick);
