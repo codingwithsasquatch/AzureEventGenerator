@@ -2,6 +2,7 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.EventHubs;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Text;
 using System;
@@ -14,7 +15,7 @@ namespace EventGeneratorAPI
     public static class SendEventHubMessageBatch
     {
         [FunctionName("Job_SendEventHubMessageBatch")]
-        public static async Task<string> Run([ActivityTrigger] EventHubJobProperties ehJobProperties, TraceWriter log)
+        public static async Task<string> Run([ActivityTrigger] EventHubJobProperties ehJobProperties, ILogger log)
         {
             try
             {
@@ -40,12 +41,12 @@ namespace EventGeneratorAPI
                 }
                 await eventHubClient.CloseAsync();
 
-                log.Info($"sent batch of {messagesInJobBatch} messages");
+                log.LogInformation($"sent batch of {messagesInJobBatch} messages");
                 return $"finished sending {messagesInJobBatch} to {ehJobProperties.EventHub}!";
             }
             catch (Exception exception)
             {
-                log.Info($"Exception: {exception.Message}");
+                log.LogInformation($"Exception: {exception.Message}");
                 return($"Exception: {exception.Message}");
             }
         }

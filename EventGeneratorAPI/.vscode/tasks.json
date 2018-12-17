@@ -2,21 +2,37 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "clean",
+      "command": "dotnet clean",
+      "type": "shell",
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "build",
       "command": "dotnet build",
       "type": "shell",
+      "dependsOn": "clean",
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "presentation": {
-        "reveal": "always"
-      },
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "Run Functions Host",
-      "identifier": "runFunctionsHost",
+      "label": "clean release",
+      "command": "dotnet clean --configuration Release",
+      "type": "shell",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "publish",
+      "command": "dotnet publish --configuration Release",
+      "type": "shell",
+      "dependsOn": "clean release",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "runFunctionsHost",
       "type": "shell",
       "dependsOn": "build",
       "options": {
@@ -24,10 +40,7 @@
       },
       "command": "func host start",
       "isBackground": true,
-      "presentation": {
-        "reveal": "always"
-      },
-      "problemMatcher": []
+      "problemMatcher": "$func-watch"
     }
   ]
 }

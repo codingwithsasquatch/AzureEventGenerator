@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 //using Microsoft.Azure.EventGrid;
 using Microsoft.Azure.EventGrid.Models;
+using Microsoft.Extensions.Logging;
 using System.Text;
 using System;
 using EventGeneratorAPI.Models;
@@ -27,7 +28,7 @@ namespace EventGeneratorAPI
         }
 
         [FunctionName("Job_SendEventGridMessageBatch")]
-        public static async Task<string> Run([ActivityTrigger] EventGridJobProperties egJobProperties, TraceWriter log)
+        public static async Task<string> Run([ActivityTrigger] EventGridJobProperties egJobProperties, ILogger log)
         {
             //ServiceClientCredentials credentials = new TopicCredentials(egJobProperties.Key);
             //EventGridClient client = new EventGridClient(credentials);
@@ -68,12 +69,12 @@ namespace EventGeneratorAPI
                     throw new Exception($"Exception HTTP Response {response.StatusCode}");
                 }
 
-                log.Info($"sent batch of {messages.Count()} messages");
+                log.LogInformation($"sent batch of {messages.Count()} messages");
                 return $"finished sending {messages.Count()} to {egJobProperties.Endpoint}!";
             }
             catch (Exception exception)
             {
-                log.Info($"Exception: {exception.Message}");
+                log.LogInformation($"Exception: {exception.Message}");
                 return $"Exception: {exception.Message}";
             }
         }

@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using EventGeneratorAPI.Models;
 using EventGeneratorAPI.MessageEngine;
@@ -16,7 +17,7 @@ namespace EventGeneratorAPI
     {
         [FunctionName("JobsOrchestrator")]
         public static async Task<string> RunOrchestrator(
-            [OrchestrationTrigger] DurableOrchestrationContext context, TraceWriter log)
+            [OrchestrationTrigger] DurableOrchestrationContext context, ILogger log)
         {
             string output = "";
             JObject jobProperties = JObject.Parse(context.GetInput<string>());
@@ -52,7 +53,7 @@ namespace EventGeneratorAPI
                 await context.CreateTimer(nextBatchTime, CancellationToken.None);
             }
 
-            log.Info($"finished sending {numOfMessages} messages");
+            log.LogInformation($"finished sending {numOfMessages} messages");
             return $"finished sending {numOfMessages} messages to your {jobProperties["messageMethod"]}";
         }
     }

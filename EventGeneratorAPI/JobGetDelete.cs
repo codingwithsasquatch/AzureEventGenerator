@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace EventGeneratorAPI
@@ -15,7 +16,7 @@ namespace EventGeneratorAPI
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "delete", Route = "job/{jobId}")]HttpRequestMessage req,
             string jobId,
             [OrchestrationClient]DurableOrchestrationClient JobsOrchestrator,
-            TraceWriter log)
+            ILogger log)
         {
             var status = await JobsOrchestrator.GetStatusAsync(jobId);
 

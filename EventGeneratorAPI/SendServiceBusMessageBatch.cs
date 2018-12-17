@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Text;
 using System;
@@ -14,7 +15,7 @@ namespace EventGeneratorAPI
     public static class SendServiceBusMessageBatch
     {
         [FunctionName("Job_SendServiceBusMessageBatch")]
-        public static async Task<string> Run([ActivityTrigger] ServiceBusJobProperties sbJobProperties, TraceWriter log)
+        public static async Task<string> Run([ActivityTrigger] ServiceBusJobProperties sbJobProperties, ILogger log)
         {
             QueueClient queueClient = new QueueClient(sbJobProperties.ConnectionString, sbJobProperties.Queue);
 
@@ -36,10 +37,10 @@ namespace EventGeneratorAPI
             }
             catch (Exception exception)
             {
-                log.Info($"Exception: {exception.Message}");
+                log.LogInformation($"Exception: {exception.Message}");
             }
 
-            log.Info($"sent batch of {messages.Count()} messages");
+            log.LogInformation($"sent batch of {messages.Count()} messages");
             return $"finished sending {messages.Count()} to {sbJobProperties.Queue}!";
         }
     }

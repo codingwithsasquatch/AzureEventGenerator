@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.IO;
 using System;
@@ -13,7 +14,7 @@ namespace EventGeneratorAPI
     {
         [FunctionName("IndexHtml")]
         public static HttpResponseMessage Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "gui")]HttpRequestMessage req, TraceWriter log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "gui")]HttpRequestMessage req, ILogger log)
         {
             FileStream stream;
             if (Environment.GetEnvironmentVariable("isLocal") == "1")

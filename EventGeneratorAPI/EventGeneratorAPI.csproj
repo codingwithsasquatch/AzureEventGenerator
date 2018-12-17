@@ -1,15 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.EventGrid" Version="1.3.0" />
-    <PackageReference Include="Microsoft.Azure.EventHubs" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.0.2" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="1.4.1" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.13" />
-    <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
+    <PackageReference Include="Microsoft.Azure.EventGrid" Version="3.0.0"/>
+    <PackageReference Include="Microsoft.Azure.EventHubs" Version="2.2.1"/>
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.2.1"/>
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="1.7.0"/>
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24"/>
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3"/>
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

@@ -3,6 +3,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Text;
 using System;
@@ -15,7 +16,7 @@ namespace EventGeneratorAPI
     public static class SendStorageQueueMessageBatch
     {
         [FunctionName("Job_SendStorageQueueMessageBatch")]
-        public static async Task<string> Run([ActivityTrigger] StorageQueueJobProperties sqJobProperties, TraceWriter log)
+        public static async Task<string> Run([ActivityTrigger] StorageQueueJobProperties sqJobProperties, ILogger log)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(sqJobProperties.ConnectionString);
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
@@ -35,10 +36,10 @@ namespace EventGeneratorAPI
             }
             catch (Exception exception)
             {
-                log.Info($"Exception: {exception.Message}");
+                log.LogInformation($"Exception: {exception.Message}");
             }
 
-            log.Info($"sent batch of {messages.Count()} messages");
+            log.LogInformation($"sent batch of {messages.Count()} messages");
             return $"finished sending {messages.Count()} to {sqJobProperties.Queue}!";
         }
     }
